@@ -1,31 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import api from './services/api';
 
 import "./styles.css";
 
 function App() {
-  async function handleAddRepository() {
-    // TODO
-  }
+	const [repositories, setRepositories] = useState([]);
 
-  async function handleRemoveRepository(id) {
-    // TODO
-  }
+	useEffect(() => {
+		api.get('/repositories').then(response => {
+			setRepositories(response.data);
+		});
+	}, []);
 
-  return (
-    <div>
-      <ul data-testid="repository-list">
-        <li>
-          Repositório 1
+	async function handleAddRepository() {
+		const response = await api.post('/repositories', {
+			title: `Projeto ${Date.now()}`,
+			url: 'https://github.com/Zardosh/bootcamp-go-stack-desafio2',
+			techs: ['ReactJS', 'Node.js'],
+		});
 
-          <button onClick={() => handleRemoveRepository(1)}>
-            Remover
-          </button>
-        </li>
-      </ul>
+		const project = response.data;
 
-      <button onClick={handleAddRepository}>Adicionar</button>
-    </div>
-  );
+		setRepositories([...repositories, project]);
+	}
+
+	async function handleRemoveRepository(id) {
+		await api.delete(`/repositories/${id}`);
+
+		setRepositories(repositories.filter(project => project.id !== id));
+	}
+
+	return (
+		<div>
+			<ul data-testid="repository-list">
+				{repositories.map(project => (
+					<li key={project.id}>
+						{project.title}
+
+						<button onClick={() => handleRemoveRepository(project.id)}>Remover</button>
+					</li>
+				))}
+			</ul>
+
+			<button onClick={handleAddRepository}>Adicionar</button>
+		</div>
+	);
 }
 
 export default App;
