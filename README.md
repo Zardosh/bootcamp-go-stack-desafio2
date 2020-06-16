@@ -35,7 +35,7 @@ Agora que você já está com o template clonado, e pronto para continuar, você
 
 - **`Remover um repositório da sua API`**: Para cada item da sua lista, deve possuir um botão com o texto **Remover** que, ao clicar, irá chamar uma função para remover esse item da lista do seu frontend e da sua API.
 
-### Específicação dos testes
+### Especificação dos testes
 
 Em cada teste, tem uma breve descrição no que sua aplicação deve cumprir para que o teste passe.
 
